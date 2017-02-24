@@ -4,10 +4,8 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.Random;
 
-import javax.swing.text.html.parser.Entity;
-
-import ser.main.classes.EntityA;
-import ser.main.classes.EntityB;
+import ser.main.interfaces.EntityA;
+import ser.main.interfaces.EntityB;
 
 public class Controller {
 
@@ -26,9 +24,10 @@ public class Controller {
 		this.game = game;
 	}
 
-	public void createEnemy(int eneny_count) {
-		for (int i = 0; i < eneny_count; i++) {
+	public void createEnemy(int enemy_count) {
+		for (int i = 0; i < enemy_count / 2; i++) {
 			addEntity(new Enemy(r.nextInt(640), -10, tex, this, game));
+			addEntity(new Asteroid(r.nextInt(640), -10, tex, this, game));
 		}
 	}
 
@@ -71,8 +70,9 @@ public class Controller {
 
 	public void removeEntity(EntityA block) {
 		ea.remove(block);
+
 	}
-	
+
 	public void addEntity(EntityB block) {
 		eb.add(block);
 	}
@@ -81,12 +81,11 @@ public class Controller {
 		eb.remove(block);
 	}
 
-	public LinkedList<EntityA> getEntityA()
-	{
+	public LinkedList<EntityA> getEntityA() {
 		return ea;
 	}
-	public LinkedList<EntityB> getEntityB()
-	{
+
+	public LinkedList<EntityB> getEntityB() {
 		return eb;
 	}
 }

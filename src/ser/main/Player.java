@@ -2,10 +2,10 @@ package ser.main;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.Random;
 
-import ser.main.classes.EntityA;
-import ser.main.classes.EntityB;
-import ser.main.lib.Animation;
+import ser.main.interfaces.EntityA;
+import ser.main.interfaces.EntityB;
 
 public class Player extends GameObject implements EntityA {
 
@@ -15,16 +15,18 @@ public class Player extends GameObject implements EntityA {
 	private Texture tex;
 
 	Game game;
-	Animation anim;
+	private int level;
 	Controller controller;
+	Random rand = new Random();
+	int randomPlayer;
 
 	public Player(double x, double y, Texture tex, Game game, Controller controller) {
 		super(x, y);
 		this.tex = tex;
 		this.game = game;
 		this.controller = controller;
-		
-		anim = new Animation(5, tex.player[0], tex.player[1], tex.player[2]);
+		level = game.getLevel();
+		randomPlayer = rand.nextInt(5);
 	}
 
 	public void tick() {
@@ -40,23 +42,25 @@ public class Player extends GameObject implements EntityA {
 		if (y >= 480 - 40)
 			y = 480 - 40;
 
-		for(int i=0;i<game.eb.size(); i++)
-		{
+		for (int i = 0; i < game.eb.size(); i++) {
 			EntityB tempEnt = game.eb.get(i);
-			
-			if(Physics.Collision(this, tempEnt))
-			{
+
+			if (Physics.Collision(this, tempEnt)) {
 				controller.removeEntity(tempEnt);
 				Game.HEALTH -= 25;
 				game.setEnemy_killed(game.getEnemy_killed() + 1);
 			}
-			
+
 		}
-		anim.runAnimation();
 	}
 
 	public void render(Graphics g) {
-		anim.drawAnimation(g, x, y, 0);
+		if (randomPlayer == 4) {
+			g.drawImage(tex.mainPlayer, (int) x, (int) y, null);
+
+		} else {
+			g.drawImage(tex.players[randomPlayer], (int) x, (int) y, null);
+		}
 	}
 
 	public Rectangle getBounds() {
